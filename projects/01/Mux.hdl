@@ -1,0 +1,45 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux.hdl
+
+/** 
+ * Multiplexor:
+ * out = a if sel == 0
+ *       b otherwise
+ *
+ * |   a   |   b   |  sel  |  out  |
+ * |   0   |   0   |   0   |   0   | => a & b & sel (1)
+ * |   0   |   0   |   1   |   0   | => a & b & sel
+ * |   0   |   1   |   0   |   0   | => a & b & sel
+ * |   0   |   1   |   1   |   1   | => !a & b & sel (2)
+ * |   1   |   0   |   0   |   1   | => a & !b & !sel (3)
+ * |   1   |   0   |   1   |   0   | => a & b & sel
+ * |   1   |   1   |   0   |   1   | => a & b & !sel (4)
+ * |   1   |   1   |   1   |   1   | => a & b & sel
+ */
+
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+    Not(in=a, out=notA);
+    Not(in=b, out=notB);
+    Not(in=sel, out=notSel);
+    And(a=b, b=sel, out=bAndSel);
+
+    And(a=a, b=bAndSel, out=out1);
+    And(a=notA, b=bAndSel, out=out2);
+
+    And(a=notB, b=notSel, out=temp1);
+    And(a=a, b=temp1, out=out3);
+
+    And(a=b, b=notSel, out=temp2);
+    And(a=a, b=temp2, out=out4);
+
+    Or(a=out1, b=out2, out=out1OrOut2);
+    Or(a=out1OrOut2, b=out3, out=out1OrOut2OrOut3);
+    Or(a=out1OrOut2OrOut3, b=out4, out=out);
+}
