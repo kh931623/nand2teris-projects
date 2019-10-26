@@ -8,11 +8,11 @@
 
 // Put your code here.
 
-// init R2 = 0
+// init R2 (result) = 0
 @R2
 M = 0
 
-// R0 == 0 || R1 == 0, then leaves
+// if R0 == 0 || R1 == 0, then leaves
 @R0
 D = M
 @END
@@ -27,6 +27,7 @@ D; JEQ
 M = 0
 
 (LOOP)
+    // if count >= R1, then breaks
     @count
     D = M
     @R1
